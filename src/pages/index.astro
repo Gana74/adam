@@ -1,0 +1,13 @@
+---
+import LandingPage from "../components/LandingPage.astro";
+import { contentByLocale } from "../data/content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  lang={contentByLocale.ru.htmlLang}
+  title={contentByLocale.ru.metaTitle}
+  description={contentByLocale.ru.metaDescription}
+>
+  <LandingPage content={contentByLocale.ru} locale="ru" />
+</BaseLayout>

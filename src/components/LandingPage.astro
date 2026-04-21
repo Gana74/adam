@@ -1,0 +1,298 @@
+---
+import {
+  ArrowRight,
+  Banknote,
+  ChartNoAxesColumnIncreasing,
+  CircleDollarSign,
+  Coins,
+  Globe2,
+  HandCoins,
+  Handshake,
+  Landmark,
+  Leaf,
+  ShieldCheck,
+  Zap,
+} from "@lucide/astro";
+import type { LandingContent, Locale } from "../data/content";
+
+type Props = {
+  content: LandingContent;
+  locale: Locale;
+};
+
+const { content, locale } = Astro.props;
+const langSwitchHref = locale === "ru" ? "/en" : "/";
+const langSwitchLabel = locale === "ru" ? "EN" : "RU";
+const startLabel = locale === "ru" ? "Начать" : "Start";
+const kickerLabel = locale === "ru" ? "Этичные финансы" : "Ethical Finance";
+const videoPlaceholderTitle =
+  locale === "ru" ? "Презентационное видео" : "Presentation video";
+const videoPlaceholderCaption =
+  locale === "ru" ? "Скоро здесь появится ролик о Halora" : "A Halora video is coming soon";
+const financeActions =
+  locale === "ru"
+    ? ["Отправить", "Инвестировать", "Пополнить", "Еще"]
+    : ["Send", "Invest", "Top up", "More"];
+---
+
+<header data-header class="site-header">
+  <div class="container header-inner">
+    <a href={locale === "ru" ? "/" : "/en"} class="logo">
+      <span class="logo-mark"><Leaf size={15} /></span>
+      Halora
+    </a>
+    <nav class="top-nav">
+      <a href="#hero">{content.nav.home}</a>
+      <a href="#problems">{content.nav.about}</a>
+      <a href="#services">{content.nav.services}</a>
+      <a href="#blog">{content.nav.blog}</a>
+    </nav>
+    <button
+      type="button"
+      class="menu-toggle"
+      data-menu-toggle
+      aria-label={locale === "ru" ? "Открыть меню" : "Open menu"}
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span class="menu-toggle-line"></span>
+      <span class="menu-toggle-line"></span>
+      <span class="menu-toggle-line"></span>
+    </button>
+    <div class="header-actions">
+      <a class="lang-switch" href={langSwitchHref}>{langSwitchLabel}</a>
+      <a class="header-start" href="mailto:invest@halora.com">{startLabel}</a>
+    </div>
+  </div>
+</header>
+<div class="menu-overlay" data-menu-overlay></div>
+<aside id="mobile-menu" class="mobile-menu" data-mobile-menu aria-hidden="true">
+  <nav class="mobile-nav">
+    <a href="#hero">{content.nav.home}</a>
+    <a href="#problems">{content.nav.about}</a>
+    <a href="#services">{content.nav.services}</a>
+    <a href="#blog">{content.nav.blog}</a>
+  </nav>
+  <div class="mobile-menu-actions">
+    <a class="lang-switch" href={langSwitchHref}>{langSwitchLabel}</a>
+    <a class="header-start" href="mailto:invest@halora.com">{startLabel}</a>
+  </div>
+</aside>
+<section class="mobile-finance">
+  <div class="container">
+    <article class="finance-widget" data-reveal>
+      <p class="finance-title">{locale === "ru" ? "Ваши финансы" : "Your finance"}</p>
+      <div class="finance-row">
+        <span>{locale === "ru" ? "Общий баланс" : "Total balance"}</span>
+        <strong>345 020 ₽</strong>
+      </div>
+      <div class="finance-row">
+        <span>{locale === "ru" ? "Этичные инвестиции" : "Ethical investments"}</span>
+        <strong>120 075 ₽</strong>
+      </div>
+      <div class="finance-actions">
+        <div class="finance-action-item">
+          <button type="button"><ArrowRight size={14} /></button>
+          <span>{financeActions[0]}</span>
+        </div>
+        <div class="finance-action-item">
+          <button type="button"><Coins size={14} /></button>
+          <span>{financeActions[1]}</span>
+        </div>
+        <div class="finance-action-item">
+          <button type="button"><CircleDollarSign size={14} /></button>
+          <span>{financeActions[2]}</span>
+        </div>
+        <div class="finance-action-item">
+          <button type="button"><Banknote size={14} /></button>
+          <span>{financeActions[3]}</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<main>
+  <section id="hero" class="hero section">
+    <div class="container hero-grid" data-reveal>
+      <div>
+        <p class="kicker">{kickerLabel}</p>
+        <h1>{content.hero.title}</h1>
+        <p class="subtitle">{content.hero.subtitle}</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="mailto:hello@halora.com">{content.hero.contact}</a>
+          <a class="btn btn-soft" href="mailto:invest@halora.com">{content.hero.invest}</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="video-placeholder">
+          <div class="video-play" />
+          <p>{videoPlaceholderTitle}</p>
+          <span>{videoPlaceholderCaption}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="problems" class="section section-alt">
+    <div class="container">
+      <h2 data-reveal>{content.problems.title}</h2>
+      <div class="grid-3 mb-5 ">
+        {content.problems.items.map((item) => (
+          <article class="card" data-reveal>
+            <ShieldCheck size={22} class="icon" />
+            <p>{item}</p>
+          </article>
+        ))}
+      </div>
+      <article class="solution-card" data-reveal>
+        <h3>{content.problems.solutionTitle}</h3>
+        <p>{content.problems.solutionText}</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="services" class="section services-section">
+    <div class="container">
+      <h2 data-reveal>{content.services.title}</h2>
+      <div class="services-shell" data-reveal>
+        <div class="service-grid-left">
+          {[0, 2].map((index) => (
+            <article class="service-card service-card-featured" data-reveal>
+              <div class="service-head">
+                {index === 0 && <Handshake size={24} class="icon" />}
+                {index === 2 && <HandCoins size={24} class="icon" />}
+                <h3>{content.services.items[index]?.name}</h3>
+              </div>
+              <p>{content.services.items[index]?.description}</p>
+              <a class="pill-link" href="#footer">
+                {content.services.learnMore}
+              </a>
+            </article>
+          ))}
+        </div>
+        <div class="service-grid-right">
+          {[1, 3].map((index) => (
+            <article class="service-card service-card-featured" data-reveal>
+              <div class="service-head">
+                {index === 1 && <Landmark size={24} class="icon" />}
+                {index === 3 && <Leaf size={24} class="icon" />}
+                <h3>{content.services.items[index]?.name}</h3>
+              </div>
+              <p>{content.services.items[index]?.description}</p>
+              <a class="pill-link" href="#footer">
+                {content.services.learnMore}
+              </a>
+            </article>
+          ))}
+          
+        </div>
+        <article class="finance-widget finance-widget-desktop" data-reveal>
+          <p class="finance-title">{locale === "ru" ? "Ваши финансы" : "Your finance"}</p>
+          <div class="finance-row">
+            <span>{locale === "ru" ? "Общий баланс" : "Total balance"}</span>
+            <strong>345 020 ₽</strong>
+          </div>
+          <div class="finance-row">
+            <span>{locale === "ru" ? "Этичные инвестиции" : "Ethical investments"}</span>
+            <strong>120 075 ₽</strong>
+          </div>
+          <div class="finance-actions">
+            <div class="finance-action-item">
+              <button type="button"><ArrowRight size={14} /></button>
+              <span>{financeActions[0]}</span>
+            </div>
+            <div class="finance-action-item">
+              <button type="button"><Coins size={14} /></button>
+              <span>{financeActions[1]}</span>
+            </div>
+            <div class="finance-action-item">
+              <button type="button"><CircleDollarSign size={14} /></button>
+              <span>{financeActions[2]}</span>
+            </div>
+            <div class="finance-action-item">
+              <button type="button"><Banknote size={14} /></button>
+              <span>{financeActions[3]}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="blog"  class="section section-alt">
+    <div class="container">
+      <h2 data-reveal>{content.global.title}</h2>
+      <div class="metric-grid">
+        <article class="metric-card" data-reveal>
+          <Globe2 size={22} class="icon" />
+          <p class="value">{content.global.stats[0]?.value}</p>
+          <p>{content.global.stats[0]?.label}</p>
+        </article>
+        <article class="metric-card" data-reveal>
+          <CircleDollarSign size={22} class="icon" />
+          <p class="value">{content.global.stats[1]?.value}</p>
+          <p>{content.global.stats[1]?.label}</p>
+        </article>
+        <article class="metric-card" data-reveal>
+          <Zap size={22} class="icon" />
+          <p class="value">{content.global.stats[2]?.value}</p>
+          <p>{content.global.stats[2]?.label}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 data-reveal>{content.it.title}</h2>
+      <div class="grid-3">
+        {content.it.items.map((item) => (
+          <article class="card" data-reveal>
+            <Banknote size={22} class="icon" />
+            <p>{item}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 data-reveal>{content.market.title}</h2>
+      <article class="highlight-card" data-reveal>
+        <ChartNoAxesColumnIncreasing size={26} class="icon" />
+        <p>{content.market.text}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 data-reveal>{content.team.title}</h2>
+      <article class="highlight-card" data-reveal>
+        <Handshake size={26} class="icon" />
+        <ul class="team-highlight-list">
+          <li>
+            <img src="/maib.png" alt="MAIB" loading="lazy" />
+            <span>Международная Ассамблея Исламского Бизнеса</span>
+          </li>
+          <li>
+            <img src="/piip.png" alt="PIIP" loading="lazy" />
+            <span>Группа инновационного и инвестиционного проектирования</span>
+          </li>
+          <li>
+            <span>Юристы и аудиторы с международной экспертизой</span>
+          </li>
+        </ul>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer id="footer" class="footer">
+  <div class="container footer-inner">
+    <p>{content.footer.rights}</p>
+    <a href="mailto:hello@halora.com">{content.footer.contact}: hello@halora.com</a>
+  </div>
+</footer>

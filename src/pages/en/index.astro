@@ -1,0 +1,13 @@
+---
+import LandingPage from "../../components/LandingPage.astro";
+import { contentByLocale } from "../../data/content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  lang={contentByLocale.en.htmlLang}
+  title={contentByLocale.en.metaTitle}
+  description={contentByLocale.en.metaDescription}
+>
+  <LandingPage content={contentByLocale.en} locale="en" />
+</BaseLayout>

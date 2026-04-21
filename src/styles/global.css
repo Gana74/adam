@@ -27,10 +27,12 @@ body {
     sans-serif;
   color: var(--text);
   background: var(--bg);
-  background-image:
-    radial-gradient(circle at -10% -15%, #dbeed8 0%, transparent 35%),
-    radial-gradient(circle at 115% -5%, #e4f2e0 0%, transparent 34%),
-    linear-gradient(180deg, #ffffff 0%, #f9fcf8 65%, #ffffff 100%);
+  background-image: url("/adam/fon.webp");
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
 }
 
 .container {
@@ -42,9 +44,9 @@ body {
   padding: 4.5rem 0;
 }
 
-.section-alt {
+/* .section-alt {
   background: var(--section);
-}
+} */
 
 h1,
 h2,
@@ -504,10 +506,12 @@ body.menu-open .mobile-menu {
 .offer-card,
 .solution-card,
 .highlight-card {
-  background: #fff;
-  border: 1px solid var(--border);
+  /* background: #fff; */
+  /* border: 1px solid var(--border); */
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  background: linear-gradient(180deg, #f8fbf6 0%, #eef7ea 100%);
+  box-shadow: 0 20px 48px -34px rgba(32, 53, 30, 0.5);
+  /* box-shadow: var(--shadow); */
   padding: 1.1rem;
 }
 
@@ -532,10 +536,10 @@ body.menu-open .mobile-menu {
 .services-shell {
   position: relative;
   padding: 1.25rem;
-  border-radius: 26px;
+  /* border-radius: 26px;
   border: 1px solid #d8e8d4;
   background: linear-gradient(180deg, #f8fbf6 0%, #eef7ea 100%);
-  box-shadow: 0 20px 48px -34px rgba(32, 53, 30, 0.5);
+  box-shadow: 0 20px 48px -34px rgba(32, 53, 30, 0.5); */
   display: grid;
   gap: 1rem;
 }
@@ -585,6 +589,10 @@ body.menu-open .mobile-menu {
 
 .service-card-featured {
   min-height: 160px;
+  background-image: url("/adam/blo.webp");
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
 }
 
 .service-head {
@@ -623,9 +631,8 @@ body.menu-open .mobile-menu {
 
 .finance-widget {
   border-radius: var(--radius);
-  border: 1px solid #d6e6d1;
-  box-shadow: var(--shadow);
-  background: #ffffff;
+  background: linear-gradient(180deg, #f8fbf6 0%, #eef7ea 100%);
+  box-shadow: 0 20px 48px -34px rgba(32, 53, 30, 0.5);
   padding: 1rem;
 }
 

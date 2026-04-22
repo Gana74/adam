@@ -836,8 +836,7 @@ body.menu-open .mobile-menu {
 
 /* Services section with background */
 #services {
-  background-image:
-    url("/adam/services-bg.webp");
+  background-image: url("/adam/services-bg.webp");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -906,6 +905,11 @@ body.menu-open .mobile-menu {
 }
 
 @media (max-width: 759px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
   .container {
     width: min(1120px, calc(100% - 1.2rem));
   }
@@ -934,6 +938,13 @@ body.menu-open .mobile-menu {
 
   .hero-art {
     min-height: 220px;
+  }
+
+  .orb,
+  .wave,
+  .services-shell::before,
+  .services-shell::after {
+    display: none;
   }
 
   .mobile-finance {

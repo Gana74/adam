@@ -21,9 +21,9 @@ type Props = {
 };
 
 const { content, locale } = Astro.props;
-const langSwitchHref = locale === "ru" ? "/en" : "/";
-const langSwitchLabel = locale === "ru" ? "EN" : "RU";
 const baseUrl = import.meta.env.BASE_URL;
+const langSwitchHref = locale === "ru" ? `${baseUrl}en/` : baseUrl;
+const langSwitchLabel = locale === "ru" ? "EN" : "RU";
 const startLabel = locale === "ru" ? "Начать" : "Start";
 const kickerLabel = locale === "ru" ? "Этичные финансы" : "Ethical Finance";
 const videoPlaceholderTitle =
@@ -38,7 +38,7 @@ const financeActions =
 
 <header data-header class="site-header">
   <div class="container header-inner">
-    <a href={locale === "ru" ? "/" : "/en"} class="logo">
+    <a href={locale === "ru" ? baseUrl : `${baseUrl}en/`} class="logo">
       <span class="logo-mark"><Leaf size={15} /></span>
       Halora
     </a>

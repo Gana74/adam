@@ -842,6 +842,10 @@ body.menu-open .mobile-menu {
   background-attachment: fixed;
 }
 
+.clw {
+  color: #fff;
+}
+
 @media (min-width: 760px) {
   .mobile-finance {
     display: none;

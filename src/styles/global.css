@@ -515,6 +515,12 @@ body.menu-open .mobile-menu {
   padding: 1.1rem;
 }
 
+/* Solution card with enhanced clarity */
+.solution-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f3fbf1 100%);
+  border: 1px solid rgba(46, 125, 50, 0.15);
+}
+
 .service-card,
 .card,
 .metric-card {
@@ -767,6 +773,54 @@ body.menu-open .mobile-menu {
   text-decoration: none;
 }
 
+/* Directional slide-in animations */
+[data-reveal].slide-in-left {
+  transform: translateX(-150px) translateY(0);
+  transition:
+    opacity 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-reveal].slide-in-left.is-visible {
+  transform: translateX(0) translateY(0);
+}
+
+[data-reveal].slide-in-bottom {
+  transform: translateX(0) translateY(150px);
+  transition:
+    opacity 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-reveal].slide-in-bottom.is-visible {
+  transform: translateX(0) translateY(0);
+}
+
+[data-reveal].slide-in-right {
+  transform: translateX(150px) translateY(0);
+  transition:
+    opacity 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-reveal].slide-in-right.is-visible {
+  transform: translateX(0) translateY(0);
+}
+
+/* Stagger animation delays for sequential effect */
+.grid-3 > [data-reveal]:nth-child(1) {
+  transition-delay: 0s;
+}
+
+.grid-3 > [data-reveal]:nth-child(2) {
+  transition-delay: 0.1s;
+}
+
+.grid-3 > [data-reveal]:nth-child(3) {
+  transition-delay: 0.2s;
+}
+
+/* Default fade-in animation */
 [data-reveal] {
   opacity: 0;
   transform: translateY(14px);
@@ -778,6 +832,15 @@ body.menu-open .mobile-menu {
 [data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Services section with background */
+#services {
+  background-image:
+    url("/adam/services-bg.webp");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 @media (min-width: 760px) {

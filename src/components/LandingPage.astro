@@ -139,12 +139,15 @@ const financeActions =
     <div class="container">
       <h2 data-reveal>{content.problems.title}</h2>
       <div class="grid-3 mb-5 ">
-        {content.problems.items.map((item) => (
-          <article class="card" data-reveal>
-            <ShieldCheck size={22} class="icon" />
-            <p>{item}</p>
-          </article>
-        ))}
+        {content.problems.items.map((item, index) => {
+          const slideDirection = index === 0 ? "slide-in-left" : index === 1 ? "slide-in-bottom" : "slide-in-right";
+          return (
+            <article class={`card ${slideDirection}`} data-reveal>
+              <ShieldCheck size={22} class="icon" />
+              <p>{item}</p>
+            </article>
+          );
+        })}
       </div>
       <article class="solution-card" data-reveal>
         <h3>{content.problems.solutionTitle}</h3>

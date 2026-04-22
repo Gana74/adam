@@ -838,7 +838,7 @@ body.menu-open .mobile-menu {
 #services {
   background-image: url("/adam/services-bg.webp");
   background-size: cover;
-  background-position: center;
+  background-position: center -300px;
   background-attachment: fixed;
 }
 

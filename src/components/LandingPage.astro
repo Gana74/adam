@@ -39,8 +39,11 @@ const financeActions =
 <header data-header class="site-header">
   <div class="container header-inner">
     <a href={locale === "ru" ? baseUrl : `${baseUrl}en/`} class="logo">
-      <span class="logo-mark"><Leaf size={15} /></span>
-      Halora
+      <span class="logo-icon-slot">
+        <img src="/adam/logo.png" alt="Halora Logo" class="logo-img" />
+        <span class="logo-target" data-logo-target aria-hidden="true"></span>
+      </span>
+      <span class="logo-text">Halora</span>
     </a>
     <nav class="top-nav">
       <a href="#hero">{content.nav.home}</a>
@@ -111,6 +114,13 @@ const financeActions =
       </div>
     </article>
   </div>
+</section>
+
+<section class="hero-video" data-hero-video>
+  <video autoplay muted loop playsinline class="hero-video-element">
+    <source src="/adam/baza.mp4" type="video/mp4" />
+  </video>
+  <img src="/adam/logo.png" alt="Halora Logo" class="hero-logo-overlay" data-hero-logo />
 </section>
 
 <main>

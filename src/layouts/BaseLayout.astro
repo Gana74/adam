@@ -103,6 +103,77 @@ const { lang, title, description } = Astro.props;
       window.addEventListener("keydown", (event) => {
         if (event.key === "Escape") setMenuState(false);
       });
+
+      // Parallax effect for hero logo and video
+      const heroVideo = document.querySelector("[data-hero-video]");
+      const heroLogo = document.querySelector("[data-hero-logo]");
+      const logoImg = document.querySelector(".logo-img");
+      const logoTarget = document.querySelector("[data-logo-target]");
+      const siteHeader = document.querySelector("[data-header]");
+
+      if (heroVideo && heroLogo && logoImg && logoTarget && siteHeader) {
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+        const heroInitialSize = parseFloat(window.getComputedStyle(heroLogo).width) || 400;
+
+        const updateLogoAndVideoPosition = () => {
+          const scrollY = window.scrollY;
+          const videoHeight = window.innerHeight;
+
+          // Finish movement before the video section is fully out.
+          const travelDistance = videoHeight * 0.92;
+          const scrollProgress = clamp(scrollY / travelDistance, 0, 1);
+
+          const targetRect = logoTarget.getBoundingClientRect();
+          const targetX = targetRect.left + targetRect.width / 2;
+          const targetY = targetRect.top + targetRect.height / 2;
+
+          const viewportCenterX = window.innerWidth / 2;
+          const viewportCenterY = window.innerHeight / 2;
+          const offsetX = (targetX - viewportCenterX) * scrollProgress;
+          // Keep a visible upward arc to avoid "only-left" motion feeling.
+          const arcLift = 70 * scrollProgress * (1 - scrollProgress);
+          const offsetY = (targetY - viewportCenterY) * scrollProgress - arcLift;
+
+          const endScale = targetRect.width / heroInitialSize;
+          const scale = 1 - (1 - endScale) * scrollProgress;
+          heroLogo.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px)) scale(${scale})`;
+
+          // Hard handoff: no fade, instant switch at target point.
+          const handoffStart = 0.72;
+          const handoffProgress = clamp(
+            (scrollProgress - handoffStart) / (1 - handoffStart),
+            0,
+            1,
+          );
+          const hasReachedHeaderSlot = scrollProgress >= 0.999;
+          heroLogo.style.opacity = "1";
+          heroLogo.classList.toggle("hidden", hasReachedHeaderSlot);
+
+          // Logo in header inherits the same trajectory before settling to final place.
+          const overlayScreenX = viewportCenterX + offsetX;
+          const overlayScreenY = viewportCenterY + offsetY;
+          const logoTranslateX = (overlayScreenX - targetX) * (1 - handoffProgress);
+          const logoTranslateY = (overlayScreenY - targetY) * (1 - handoffProgress);
+          const logoScale = scale + (1 - scale) * handoffProgress;
+          logoImg.style.transform = `translate(${logoTranslateX}px, ${logoTranslateY}px) scale(${logoScale})`;
+          logoImg.classList.toggle("is-visible", hasReachedHeaderSlot);
+
+          // Smoothly collapse video block height to avoid blank gap before hero section.
+          const collapseProgress = clamp(scrollY / (videoHeight * 1.25), 0, 1);
+          const minHeight = Math.max(videoHeight * 0.78, 440);
+          const currentHeight = videoHeight - (videoHeight - minHeight) * collapseProgress;
+          heroVideo.style.height = `${currentHeight}px`;
+        };
+
+        // Initial calculation
+        updateLogoAndVideoPosition();
+
+        // Update on scroll
+        window.addEventListener("scroll", updateLogoAndVideoPosition, { passive: true });
+
+        // Update on resize
+        window.addEventListener("resize", updateLogoAndVideoPosition);
+      }
     </script>
   </body>
 </html>

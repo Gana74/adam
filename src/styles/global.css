@@ -2,7 +2,7 @@
 
 :root {
   --bg: #ffffff;
-  --section: #f4f9f3;
+  --section: #ebf6e6;
   --text: #1f2937;
   --muted: #4b5563;
   --brand: #2e7d32;
@@ -14,6 +14,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -115,16 +116,12 @@ p {
   transition:
     background 0.25s ease,
     box-shadow 0.25s ease;
-  background: linear-gradient(
-    180deg,
-    rgba(246, 251, 245, 0.88),
-    rgba(246, 251, 245, 0.35)
-  );
+  background: #ebf6e6;
   border-bottom: 1px solid rgba(217, 233, 217, 0.45);
 }
 
 .site-header.is-scrolled {
-  background: rgba(255, 255, 255, 0.93);
+  background: #ebf6e6;
   box-shadow: 0 10px 30px -25px rgba(15, 23, 42, 0.7);
   backdrop-filter: blur(8px);
 }
@@ -134,7 +131,7 @@ p {
   align-items: center;
   justify-content: space-between;
   gap: 0.8rem;
-  min-height: 76px;
+  /* min-height: 76px; */
 }
 
 .menu-toggle {
@@ -568,19 +565,13 @@ body.menu-open .mobile-menu {
 .offer-card,
 .solution-card,
 .highlight-card {
-  /* background: #fff; */
-  /* border: 1px solid var(--border); */
+  background: var(--section);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, #f8fbf6 0%, #eef7ea 100%);
-  box-shadow: 0 20px 48px -34px rgba(32, 53, 30, 0.5);
-  /* box-shadow: var(--shadow); */
-  padding: 1.1rem;
-}
 
-/* Solution card with enhanced clarity */
-.solution-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f3fbf1 100%);
-  border: 1px solid rgba(46, 125, 50, 0.15);
+  box-shadow: 0 20px 48px -34px rgba(32, 53, 30, 0.5);
+  box-shadow: var(--shadow);
+  padding: 1.1rem;
 }
 
 .service-card,
@@ -901,7 +892,7 @@ body.menu-open .mobile-menu {
   background-image: url("/adam/services-bg.webp");
   background-size: cover;
   background-position: center -300px;
-  background-attachment: fixed;
+  background-attachment: scroll;
 }
 
 .clw {
@@ -971,11 +962,6 @@ body.menu-open .mobile-menu {
 }
 
 @media (max-width: 759px) {
-  html,
-  body {
-    overflow-x: hidden;
-  }
-
   .container {
     width: min(1120px, calc(100% - 1.2rem));
   }
@@ -1025,15 +1011,15 @@ body.menu-open .mobile-menu {
   }
 
   .mobile-finance {
-    display: block;
+    /* display: block; */
   }
 
   .finance-widget-desktop {
-    display: none;
+    /* display: none; */
   }
 
   .mobile-finance .finance-widget {
-    margin-top: 0.35rem;
+    /* margin-top: 0.35rem; */
   }
 
   .services-shell {

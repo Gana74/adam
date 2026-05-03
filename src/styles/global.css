@@ -896,7 +896,11 @@ body.menu-open .mobile-menu {
 }
 
 .clw {
-  color: #fff;
+  display: inline-block; /* Или width: fit-content; */
+  background-color: var(--section);
+  border-radius: var(--radius);
+  color: var(--muted);
+  padding: 4px 10px;
 }
 
 @media (min-width: 760px) {
@@ -1032,5 +1036,11 @@ body.menu-open .mobile-menu {
 
   .finance-row strong {
     text-align: right;
+  }
+
+  #services {
+    background-size: cover;
+    background-position: center;
+    background-attachment: scroll;
   }
 }

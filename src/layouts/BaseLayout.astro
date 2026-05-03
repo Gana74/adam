@@ -17,7 +17,10 @@ const { lang, title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/x-icon" href={`${import.meta.env.BASE_URL}favicon.ico`} />
+    <link rel="icon" type="image/x-icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="any" />
+    <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="180x180" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="64x64" />
+    <meta name="theme-color" content="#ffffff" />
     <title>{title}</title>
   </head>
   <body>
@@ -113,12 +116,22 @@ const { lang, title, description } = Astro.props;
 
       if (heroVideo && heroLogo && logoImg && logoTarget && siteHeader) {
         const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-        const heroInitialSize = parseFloat(window.getComputedStyle(heroLogo).width) || 400;
-        const isMobile = window.innerWidth < 760;
+        let cachedHeroSize = null;
+        
+        // Get hero size with caching - recalculate if value seems wrong
+        const getHeroInitialSize = () => {
+          const computed = parseFloat(window.getComputedStyle(heroLogo).width);
+          if (computed > 0) {
+            cachedHeroSize = computed;
+          }
+          return cachedHeroSize || 280;
+        };
 
         const updateLogoAndVideoPosition = () => {
           const scrollY = window.scrollY;
           const videoHeight = window.innerHeight;
+          const isMobile = window.innerWidth < 760;
+          const heroInitialSize = getHeroInitialSize();
 
           // Finish movement before the video section is fully out.
           // On mobile, finish earlier for smoother transition
@@ -138,7 +151,7 @@ const { lang, title, description } = Astro.props;
           const arcLift = isMobile ? 0 : 70 * scrollProgress * (1 - scrollProgress);
           const offsetY = (targetY - viewportCenterY) * scrollProgress - arcLift;
 
-          const endScale = targetRect.width / heroInitialSize;
+          const endScale = clamp(targetRect.width / heroInitialSize, 0.1, 1);
           const scale = 1 - (1 - endScale) * scrollProgress;
           heroLogo.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px)) scale(${scale})`;
 
@@ -170,14 +183,20 @@ const { lang, title, description } = Astro.props;
           heroVideo.style.height = `${currentHeight}px`;
         };
 
-        // Initial calculation
-        updateLogoAndVideoPosition();
+        // Initial calculation with requestAnimationFrame to ensure proper timing
+        requestAnimationFrame(() => {
+          cachedHeroSize = null; // Reset cache
+          updateLogoAndVideoPosition();
+        });
 
         // Update on scroll
         window.addEventListener("scroll", updateLogoAndVideoPosition, { passive: true });
 
-        // Update on resize
-        window.addEventListener("resize", updateLogoAndVideoPosition);
+        // Update on resize - reset cache
+        window.addEventListener("resize", () => {
+          cachedHeroSize = null;
+          updateLogoAndVideoPosition();
+        });
       }
     </script>
   </body>

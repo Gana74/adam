@@ -108,46 +108,56 @@ const { lang, title, description } = Astro.props;
       });
 
       // Parallax effect for hero logo and video
-      const heroVideo = document.querySelector("[data-hero-video]");
       const heroLogo = document.querySelector("[data-hero-logo]");
       const logoImg = document.querySelector(".logo-img");
       const logoTarget = document.querySelector("[data-logo-target]");
       const siteHeader = document.querySelector("[data-header]");
 
-      if (heroVideo && heroLogo && logoImg && logoTarget && siteHeader) {
+      if (heroLogo && logoImg && logoTarget && siteHeader) {
         const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
         let cachedHeroSize = null;
+        let isInitialized = false;
         
-        // Get hero size with caching - recalculate if value seems wrong
+        // Determine if mobile at init time
+        const isMobileInit = window.innerWidth < 760;
+        
+        // Get hero size with caching
         const getHeroInitialSize = () => {
           const computed = parseFloat(window.getComputedStyle(heroLogo).width);
-          if (computed > 0) {
+          if (computed > 50) { // Ensure reasonable size
             cachedHeroSize = computed;
           }
-          return cachedHeroSize || 280;
+          return cachedHeroSize || (isMobileInit ? 180 : 280);
+        };
+
+        const getViewportSize = () => {
+          const vv = window.visualViewport;
+          return {
+            width: vv?.width ?? window.innerWidth,
+            height: vv?.height ?? window.innerHeight,
+          };
         };
 
         const updateLogoAndVideoPosition = () => {
           const scrollY = window.scrollY;
-          const videoHeight = window.innerHeight;
+          const { width: vw, height: vh } = getViewportSize();
+          const videoHeight = vh;
           const isMobile = window.innerWidth < 760;
           const heroInitialSize = getHeroInitialSize();
 
-          // Finish movement before the video section is fully out.
-          // On mobile, finish earlier for smoother transition
-          const travelDistance = isMobile ? videoHeight * 0.85 : videoHeight * 0.92;
+          // On mobile: different animation curve
+          const travelDistance = isMobile ? videoHeight * 0.75 : videoHeight * 0.92;
           const scrollProgress = clamp(scrollY / travelDistance, 0, 1);
 
           const targetRect = logoTarget.getBoundingClientRect();
           const targetX = targetRect.left + targetRect.width / 2;
           const targetY = targetRect.top + targetRect.height / 2;
 
-          const viewportCenterX = window.innerWidth / 2;
-          const viewportCenterY = window.innerHeight / 2;
+          const viewportCenterX = vw / 2;
+          const viewportCenterY = vh / 2;
           const offsetX = (targetX - viewportCenterX) * scrollProgress;
           
-          // On mobile: pure linear interpolation (no arc lift)
-          // On desktop: keep arc lift for visual appeal
+          // Linear on mobile, arc on desktop
           const arcLift = isMobile ? 0 : 70 * scrollProgress * (1 - scrollProgress);
           const offsetY = (targetY - viewportCenterY) * scrollProgress - arcLift;
 
@@ -155,9 +165,8 @@ const { lang, title, description } = Astro.props;
           const scale = 1 - (1 - endScale) * scrollProgress;
           heroLogo.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px)) scale(${scale})`;
 
-          // Hard handoff: no fade, instant switch at target point.
-          // On mobile: adjust handoff timing for smoother transition
-          const handoffStart = isMobile ? 0.65 : 0.72;
+          // Handoff point
+          const handoffStart = isMobile ? 0.55 : 0.72;
           const handoffProgress = clamp(
             (scrollProgress - handoffStart) / (1 - handoffStart),
             0,
@@ -167,7 +176,7 @@ const { lang, title, description } = Astro.props;
           heroLogo.style.opacity = "1";
           heroLogo.classList.toggle("hidden", hasReachedHeaderSlot);
 
-          // Logo in header inherits the same trajectory before settling to final place.
+          // Logo in header
           const overlayScreenX = viewportCenterX + offsetX;
           const overlayScreenY = viewportCenterY + offsetY;
           const logoTranslateX = (overlayScreenX - targetX) * (1 - handoffProgress);
@@ -175,28 +184,54 @@ const { lang, title, description } = Astro.props;
           const logoScale = scale + (1 - scale) * handoffProgress;
           logoImg.style.transform = `translate(${logoTranslateX}px, ${logoTranslateY}px) scale(${logoScale})`;
           logoImg.classList.toggle("is-visible", hasReachedHeaderSlot);
-
-          // Smoothly collapse video block height to avoid blank gap before hero section.
-          const collapseProgress = clamp(scrollY / (videoHeight * 1.25), 0, 1);
-          const minHeight = Math.max(videoHeight * 0.78, 440);
-          const currentHeight = videoHeight - (videoHeight - minHeight) * collapseProgress;
-          heroVideo.style.height = `${currentHeight}px`;
         };
 
-        // Initial calculation with requestAnimationFrame to ensure proper timing
-        requestAnimationFrame(() => {
-          cachedHeroSize = null; // Reset cache
-          updateLogoAndVideoPosition();
-        });
+        // Wait for images before init
+        const initializeWhenReady = async () => {
+          // Wait up to 3 seconds for images to load
+          let attempts = 0;
+          while (attempts < 30) {
+            const computed = parseFloat(window.getComputedStyle(heroLogo).width);
+            if (computed > 50) {
+              // Size is ready
+              break;
+            }
+            await new Promise(r => setTimeout(r, 100));
+            attempts++;
+          }
+          
+          // Initialize
+          requestAnimationFrame(() => {
+            cachedHeroSize = null;
+            updateLogoAndVideoPosition();
+            isInitialized = true;
+          });
+        };
+
+        initializeWhenReady();
 
         // Update on scroll
         window.addEventListener("scroll", updateLogoAndVideoPosition, { passive: true });
 
-        // Update on resize - reset cache
+        // Update on resize
         window.addEventListener("resize", () => {
           cachedHeroSize = null;
           updateLogoAndVideoPosition();
         });
+
+        window.visualViewport?.addEventListener(
+          "resize",
+          () => {
+            cachedHeroSize = null;
+            updateLogoAndVideoPosition();
+          },
+          { passive: true },
+        );
+        window.visualViewport?.addEventListener(
+          "scroll",
+          updateLogoAndVideoPosition,
+          { passive: true },
+        );
       }
     </script>
   </body>

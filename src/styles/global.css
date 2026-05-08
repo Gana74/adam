@@ -917,10 +917,10 @@ body.menu-open .mobile-menu {
 /* Default fade-in animation */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateY(50px);
   transition:
-    opacity 4s ease,
-    transform 6s ease;
+    opacity 3s ease,
+    transform 5s ease;
 }
 
 [data-reveal].is-visible {
